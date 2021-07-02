@@ -1,13 +1,13 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { filter, map, startWith, switchMap, takeUntil } from "rxjs/operators";
-import { LaunchDetailsGQL } from "../services/spacexGraphql.service";
 import {
   NgxGalleryOptions,
   NgxGalleryImage,
   NgxGalleryAnimation
 } from "ngx-gallery-9";
 import { Subject } from "rxjs";
+import { LaunchFacadeService } from "../services/launch-facade.service";
 
 @Component({
   selector: "app-launch-details",
@@ -18,7 +18,7 @@ import { Subject } from "rxjs";
 export class LaunchDetailsComponent implements OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly launchDetailsService: LaunchDetailsGQL
+    private readonly launchFacade: LaunchFacadeService
   ) {}
 
   readonly galleryOptions: NgxGalleryOptions[] = [
@@ -47,8 +47,7 @@ export class LaunchDetailsComponent implements OnDestroy {
   readonly destroy$ = new Subject<boolean>();
   readonly launchDetails$ = this.route.paramMap.pipe(
     map(params => params.get("id") as string),
-    switchMap(id => this.launchDetailsService.fetch({ id })),
-    map(res => res.data.launch)
+    switchMap(id => this.launchFacade.pastLaunchDetailsStoreCache(id))
   );
   readonly galleryImages$ = this.launchDetails$.pipe(
     startWith([]),
