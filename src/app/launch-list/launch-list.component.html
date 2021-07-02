@@ -15,9 +15,17 @@
             alt="Mission patch of {{ launch.mission_name }}"
           />
           <mat-card-title>{{ launch.mission_name }}</mat-card-title>
-          <mat-card-subtitle
-            >{{ launch.rocket.rocket_name }} - launched
-            {{ launch.launch_date_utc }}</mat-card-subtitle
+          <mat-card-subtitle>
+            {{ launch.rocket.rocket_name }} - launched
+            <ng-container
+              *ngIf="launch.launch_date_utc as date; else dateNotExist"
+            >
+              {{ date | relativeTime }}
+            </ng-container>
+            <ng-template #dateNotExist>
+              | Launch Date unavailable
+            </ng-template>
+          </mat-card-subtitle
           >
         </mat-card-header>
         <ng-container *ngIf="launch.links.flickr_images.length > 0; else defaultPlaceholder">
