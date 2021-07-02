@@ -1,6 +1,4 @@
 import { LaunchListState } from "./../store/reducers/launch-list.reducer";
-import { map } from "rxjs/operators";
-import { PastLaunchesListGQL } from "./spacexGraphql.service";
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 import {
@@ -8,52 +6,27 @@ import {
   loadLaunchDetails,
   resetLaunchDetails
 } from "../store/actions";
-import * as launchListQuery from "../store/selectors/launch-list.selector";
-import * as launchDetailsQuery from "../store/selectors/launch-details.selector";
+import { launchListQuery, launchDetailsQuery } from "../store/selectors";
 
 @Injectable({
   providedIn: "root"
 })
 export class LaunchFacadeService {
+  constructor(private readonly store: Store<LaunchListState>) {}
+
   // Launch List
-  readonly launchListState$ = this.store.select(
-    launchListQuery.getLaunchListState
-  );
-  readonly launchList$ = this.store.select(launchListQuery.getLaunchList);
-  readonly launchListLoaded$ = this.store.select(
-    launchListQuery.getLaunchListLoaded
-  );
-  readonly launchListLoading$ = this.store.select(
-    launchListQuery.getLaunchListLoading
-  );
+  readonly launchList$ = this.store.select(launchListQuery.data);
 
   // Launch Details
-  readonly launchDetails$ = this.store.select(
-    launchDetailsQuery.getLaunchDetails
-  );
-  readonly launchDetailsLoaded$ = this.store.select(
-    launchDetailsQuery.getLaunchDetailsLoaded
-  );
+  readonly launchDetails$ = this.store.select(launchDetailsQuery.data);
+  readonly launchDetailsLoaded$ = this.store.select(launchDetailsQuery.loaded);
 
-  constructor(
-    private readonly store: Store<LaunchListState>,
-    private readonly pastLaunchesService: PastLaunchesListGQL
-  ) {}
-
-  pastLaunchListStoreCache() {
+  loadLaunchList() {
     this.store.dispatch(loadLaunchList());
-    return this.launchList$;
   }
 
-  pastLaunchListFacade() {
-    return this.pastLaunchesService
-      .fetch({ limit: 30 })
-      .pipe(map(res => res.data.launchesPast));
-  }
-
-  pastLaunchDetailsStoreCache(id: string) {
+  loadLaunchDetailsById(id: string) {
     this.store.dispatch(loadLaunchDetails({ id }));
-    return this.launchDetails$;
   }
 
   resetLaunchDetails() {

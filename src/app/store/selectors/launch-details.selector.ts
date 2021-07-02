@@ -1,23 +1,23 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { LaunchDetailsState } from "../reducers/launch-details.reducer";
 
-export const getLaunchDetailsState = createFeatureSelector<LaunchDetailsState>(
+const getLaunchDetailsState = createFeatureSelector<LaunchDetailsState>(
   "launchDetails"
 );
 
-export const getLaunchDetails = createSelector(
+const data = createSelector(
   getLaunchDetailsState,
-  (state: any) => {
-    return state.data;
-  }
+  (state: any) => state.data
 );
 
-export const getLaunchDetailsLoaded = createSelector(
+const loaded = createSelector(
   getLaunchDetailsState,
   (state: any) => state.loaded
 );
 
-export const getLaunchDetailsLoading = createSelector(
+const loading = createSelector(
   getLaunchDetailsState,
   (state: any) => state.loading
 );
+
+export const launchDetailsQuery = { data, loaded, loading };

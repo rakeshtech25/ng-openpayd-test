@@ -1,10 +1,15 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { MatCardModule, MatIconModule } from "@angular/material";
+import {
+  MatCardModule,
+  MatIconModule,
+  MatProgressSpinnerModule
+} from "@angular/material";
 import { RouterTestingModule } from "@angular/router/testing";
 import { StoreModule } from "@ngrx/store";
 import { Apollo } from "apollo-angular";
-import { launchReducers } from "../store";
 import { NgxGalleryModule } from "ngx-gallery-9";
+import { LoaderComponent } from "../loader/loader.component";
+import { launchReducers } from "../store";
 
 import { LaunchDetailsComponent } from "./launch-details.component";
 
@@ -14,11 +19,12 @@ describe("LaunchDetailsComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [LaunchDetailsComponent],
+      declarations: [LaunchDetailsComponent, LoaderComponent],
       imports: [
         RouterTestingModule,
         MatCardModule,
         MatIconModule,
+        MatProgressSpinnerModule,
         NgxGalleryModule,
         StoreModule.forRoot(launchReducers)
       ],

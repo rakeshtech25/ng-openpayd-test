@@ -1,12 +1,17 @@
-import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  OnDestroy,
+  OnInit
+} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { filter, map, startWith, switchMap, takeUntil } from "rxjs/operators";
+import { filter, map, startWith, takeUntil } from "rxjs/operators";
+import { Subject } from "rxjs";
 import {
   NgxGalleryOptions,
   NgxGalleryImage,
   NgxGalleryAnimation
 } from "ngx-gallery-9";
-import { Subject } from "rxjs";
 import { LaunchFacadeService } from "../services/launch-facade.service";
 
 @Component({
@@ -15,10 +20,10 @@ import { LaunchFacadeService } from "../services/launch-facade.service";
   styleUrls: ["./launch-details.component.css"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LaunchDetailsComponent implements OnDestroy {
+export class LaunchDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly launchFacade: LaunchFacadeService
+    private readonly facade: LaunchFacadeService
   ) {}
 
   readonly galleryOptions: NgxGalleryOptions[] = [
@@ -45,10 +50,8 @@ export class LaunchDetailsComponent implements OnDestroy {
   ];
   readonly defaultImage = "assets/default-image.png";
   readonly destroy$ = new Subject<boolean>();
-  readonly launchDetails$ = this.route.paramMap.pipe(
-    map(params => params.get("id") as string),
-    switchMap(id => this.launchFacade.pastLaunchDetailsStoreCache(id))
-  );
+  readonly launchDetails$ = this.facade.launchDetails$;
+  readonly loaded$ = this.facade.launchDetailsLoaded$;
   readonly galleryImages$ = this.launchDetails$.pipe(
     startWith([]),
     takeUntil(this.destroy$),
@@ -56,16 +59,25 @@ export class LaunchDetailsComponent implements OnDestroy {
     map(result => result["links"].flickr_images.map(this.getImages))
   );
 
+  ngOnInit() {
+    this.facade.resetLaunchDetails();
+    this.route.paramMap
+      .pipe(map(params => params.get("id") as string))
+      .subscribe(id => {
+        this.facade.loadLaunchDetailsById(id);
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
+
   private getImages(item: string): NgxGalleryImage {
     return {
       small: item,
       medium: item,
       big: item
     };
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }

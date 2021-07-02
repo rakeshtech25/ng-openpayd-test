@@ -4,12 +4,12 @@ export const loadLaunchList = createAction("[Launch] Load Launch List");
 
 export const loadLaunchListSuccess = createAction(
   "[Launch] Load Launch List Success",
-  props<{ payload: any[] }>()
+  props<{ readonly payload: any[] }>()
 );
 
 export const loadLaunchListFail = createAction(
   "[Launch] Load Launch List Fail",
-  props<{ payload: any }>()
+  props<{ readonly payload: any }>()
 );
 
 export type LaunchListAction =

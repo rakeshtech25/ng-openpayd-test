@@ -1,8 +1,8 @@
 <ng-container
-  *ngIf="launchDetails$ | async as launchDetails"
+  *ngIf="loaded$ | async; else detailNotLoaded"
   class="launch-details"
 >
-  <div class="container">
+  <div *ngIf="launchDetails$ | async as launchDetails" class="container">
     <header>
       <a mat-fab aria-label="Go back" color="primary" [routerLink]="['/']">
         <mat-icon>navigate_before</mat-icon>
@@ -37,3 +37,7 @@
     </div>
   </div>
 </ng-container>
+
+<ng-template #detailNotLoaded>
+  <app-loader></app-loader>
+</ng-template>

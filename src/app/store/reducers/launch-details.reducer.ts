@@ -1,11 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import {
-  LaunchDetailsAction,
-  resetLaunchDetails,
-  loadLaunchDetails,
-  loadLaunchDetailsFail,
-  loadLaunchDetailsSuccess
-} from "../actions";
+import * as a from "../actions/launch.details.action";
 
 export type LaunchDetailsState = any;
 
@@ -19,20 +13,20 @@ const initialState: LaunchDetailsState = {
 const launchDetailsReducer = createReducer(
   initialState,
 
-  on(resetLaunchDetails, () => ({
+  on(a.resetLaunchDetails, () => ({
     ...initialState
   })),
 
-  on(loadLaunchDetails, () => ({
+  on(a.loadLaunchDetails, () => ({
     ...initialState,
     loading: true
   })),
-  on(loadLaunchDetailsSuccess, (_, { payload }) => ({
+  on(a.loadLaunchDetailsSuccess, (_, { payload }) => ({
     ...initialState,
     data: payload,
     loaded: true
   })),
-  on(loadLaunchDetailsFail, (_, { payload }) => ({
+  on(a.loadLaunchDetailsFail, (_, { payload }) => ({
     ...initialState,
     error: payload
   }))
@@ -40,7 +34,7 @@ const launchDetailsReducer = createReducer(
 
 export function reducer(
   state: LaunchDetailsState | undefined,
-  action: LaunchDetailsAction
+  action: a.LaunchDetailsAction
 ) {
   return launchDetailsReducer(state, action);
 }

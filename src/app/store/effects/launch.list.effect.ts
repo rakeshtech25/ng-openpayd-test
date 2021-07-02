@@ -16,7 +16,7 @@ export class LaunchEffects {
     private readonly pastLaunchesService: PastLaunchesListGQL
   ) {}
 
-  loadLaunchList$ = createEffect(() =>
+  readonly loadLaunchList$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadLaunchList),
       switchMap(() =>

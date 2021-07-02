@@ -1,5 +1,5 @@
 import { LaunchFacadeService } from "./../services/launch-facade.service";
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
 
 @Component({
   selector: "app-launch-list",
@@ -7,9 +7,13 @@ import { Component, ChangeDetectionStrategy } from "@angular/core";
   styleUrls: ["./launch-list.component.css"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LaunchListComponent {
+export class LaunchListComponent implements OnInit {
   constructor(private readonly launchFacade: LaunchFacadeService) {}
 
   readonly defaultImage = "assets/default-image.png";
-  readonly pastLaunches$ = this.launchFacade.pastLaunchListStoreCache();
+  readonly pastLaunches$ = this.launchFacade.launchList$;
+
+  ngOnInit() {
+    this.launchFacade.loadLaunchList();
+  }
 }

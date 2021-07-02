@@ -1,10 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import {
-  LaunchListAction,
-  loadLaunchList,
-  loadLaunchListFail,
-  loadLaunchListSuccess
-} from "../actions";
+import * as a from "../actions/launch.list.action";
 
 export type LaunchListState = any;
 
@@ -17,12 +12,12 @@ const initialState: LaunchListState = {
 
 const launchListReducer = createReducer(
   initialState,
-  on(loadLaunchList, state => ({
+  on(a.loadLaunchList, state => ({
     ...state,
     loading: true,
     loaded: false
   })),
-  on(loadLaunchListSuccess, (state, { payload }) => {
+  on(a.loadLaunchListSuccess, (state, { payload }) => {
     return {
       ...state,
       data: payload,
@@ -30,7 +25,7 @@ const launchListReducer = createReducer(
       loaded: true
     };
   }),
-  on(loadLaunchListFail, (state, { payload }) => ({
+  on(a.loadLaunchListFail, (_, { payload }) => ({
     ...initialState,
     error: payload
   }))
@@ -38,7 +33,7 @@ const launchListReducer = createReducer(
 
 export function reducer(
   state: LaunchListState | undefined,
-  action: LaunchListAction
+  action: a.LaunchListAction
 ) {
   return launchListReducer(state, action);
 }

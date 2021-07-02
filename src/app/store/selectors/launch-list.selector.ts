@@ -1,23 +1,21 @@
 import { LaunchListState } from "../reducers";
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 
-export const getLaunchListState = createFeatureSelector<LaunchListState>(
-  "launchList"
-);
+const getLaunchListState = createFeatureSelector<LaunchListState>("launchList");
 
-export const getLaunchList = createSelector(
+const data = createSelector(
   getLaunchListState,
-  (state: any) => {
-    return state.data;
-  }
+  (state: any) => state.data
 );
 
-export const getLaunchListLoaded = createSelector(
+const loaded = createSelector(
   getLaunchListState,
   (state: any) => state.loaded
 );
 
-export const getLaunchListLoading = createSelector(
+const loading = createSelector(
   getLaunchListState,
   (state: any) => state.loading
 );
+
+export const launchListQuery = { data, loaded, loading };

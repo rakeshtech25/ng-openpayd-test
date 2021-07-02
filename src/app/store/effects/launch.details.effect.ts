@@ -13,14 +13,14 @@ import { of } from "rxjs";
 export class LaunchDetailsEffects {
   constructor(
     private actions$: Actions,
-    private readonly pastLaunchesService: LaunchDetailsGQL
+    private readonly service: LaunchDetailsGQL
   ) {}
 
-  loadLaunchList$ = createEffect(() =>
+  readonly loadLaunchList$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadLaunchDetails),
       switchMap(({ id }) =>
-        this.pastLaunchesService.fetch({ id }).pipe(
+        this.service.fetch({ id }).pipe(
           map((response: any) =>
             loadLaunchDetailsSuccess({
               payload: response.data.launch as any
