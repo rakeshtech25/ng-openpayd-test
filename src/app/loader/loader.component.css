@@ -1,0 +1,6 @@
+.spinner {
+  height: 300px;
+  justify-content: center;
+  display: grid;
+  align-items: center;
+}

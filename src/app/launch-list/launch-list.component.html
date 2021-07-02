@@ -25,9 +25,12 @@
             height="300"
             width="300"
             mat-card-image
+            [hidden]="!launch.imageLoaded"
+            (load)="launch.imageLoaded = true"
             [src]="launch.links.flickr_images[0]"
             alt="Photo of {{ launch.mission_name }}"
           />
+          <app-loader *ngIf="!launch.imageLoaded"></app-loader>
         </ng-container>
         <ng-template #defaultPlaceholder>
           <img
