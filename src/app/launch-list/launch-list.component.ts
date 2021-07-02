@@ -9,5 +9,7 @@ import { Component, ChangeDetectionStrategy } from "@angular/core";
 })
 export class LaunchListComponent {
   constructor(private readonly launchFacade: LaunchFacadeService) {}
-  pastLaunches$ = this.launchFacade.pastLaunchListStoreCache();
+
+  readonly defaultImage = "assets/default-image.png";
+  readonly pastLaunches$ = this.launchFacade.pastLaunchListStoreCache();
 }
