@@ -11,11 +11,13 @@ import { GraphQLModule } from "./graphql.module";
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { RelativeTimePipe } from "./core/helpers/pipes/relative-time/relative-time.pipe";
 import { StoreModule } from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
+import { NgxGalleryModule } from "ngx-gallery-9";
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { StoreDevtoolsModule } from "@ngrx/store-devtools";
     HttpClientModule,
     BrowserAnimationsModule,
     MatCardModule,
+    MatIconModule,
     MatProgressSpinnerModule,
+    NgxGalleryModule,
     StoreModule.forRoot(launchReducers),
     EffectsModule.forRoot(launchEffects),
     StoreDevtoolsModule.instrument()

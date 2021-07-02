@@ -1,7 +1,59 @@
-.photo-grid {
-  padding-top: 30px;
-  display: grid;
-  grid-gap: 10px;
-  grid-template-columns: repeat(auto-fill, 300px);
-  justify-content: center;
+.container {
+  width: 85%;
+  margin: 20px auto;
+  flex-wrap: wrap;
+}
+
+header a {
+  float: left;
+  color: grey;
+}
+
+header a .mat-icon {
+  font-size: 40px;
+  margin-top: 2px;
+}
+
+header h1 {
+  float: left;
+  margin: 0px 0px 0px 20px;
+  color: grey;
+}
+
+header {
+  display: table;
+  margin-left: 5%;
+  padding: 15px 0px;
+}
+
+.sections {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.sub-section {
+  min-width: 400px;
+  width: 40%;
+}
+
+.mat-card-lg-image {
+  display: table;
+  margin: 20px auto 35px !important;
+}
+
+.detail-container .mat-card {
+  min-height: 400px;
+  box-shadow: none;
+  border: 2px solid grey;
+  padding: 20px;
+}
+
+.detail-container .mat-card p {
+  text-align: justify;
+  line-height: 30px;
+}
+
+ngx-gallery {
+  width: 100% !important;
 }

@@ -1,7 +1,13 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { map, switchMap } from "rxjs/operators";
+import { filter, map, startWith, switchMap, takeUntil } from "rxjs/operators";
 import { LaunchDetailsGQL } from "../services/spacexGraphql.service";
+import {
+  NgxGalleryOptions,
+  NgxGalleryImage,
+  NgxGalleryAnimation
+} from "ngx-gallery-9";
+import { Subject } from "rxjs";
 
 @Component({
   selector: "app-launch-details",
@@ -9,15 +15,58 @@ import { LaunchDetailsGQL } from "../services/spacexGraphql.service";
   styleUrls: ["./launch-details.component.css"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LaunchDetailsComponent {
+export class LaunchDetailsComponent implements OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly launchDetailsService: LaunchDetailsGQL
   ) {}
 
-  launchDetails$ = this.route.paramMap.pipe(
+  readonly galleryOptions: NgxGalleryOptions[] = [
+    {
+      width: "500px",
+      height: "425px",
+      thumbnailsColumns: 3,
+      imageAnimation: NgxGalleryAnimation.Slide
+    },
+    {
+      breakpoint: 800,
+      width: "500px",
+      height: "425px",
+      imagePercent: 50,
+      thumbnailsPercent: 20,
+      thumbnailsMargin: 20,
+      thumbnailMargin: 20
+    },
+    {
+      breakpoint: 400,
+      width: "300px",
+      preview: false
+    }
+  ];
+  readonly defaultImage = "assets/default-image.png";
+  readonly destroy$ = new Subject<boolean>();
+  readonly launchDetails$ = this.route.paramMap.pipe(
     map(params => params.get("id") as string),
     switchMap(id => this.launchDetailsService.fetch({ id })),
     map(res => res.data.launch)
   );
+  readonly galleryImages$ = this.launchDetails$.pipe(
+    startWith([]),
+    takeUntil(this.destroy$),
+    filter(result => result && result["links"]),
+    map(result => result["links"].flickr_images.map(this.getImages))
+  );
+
+  private getImages(item: string): NgxGalleryImage {
+    return {
+      small: item,
+      medium: item,
+      big: item
+    };
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
 }
